@@ -90,3 +90,29 @@ func ExtractGIF(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, ExtraceGIFResponse{GIF: base64.StdEncoding.EncodeToString(buf.Bytes())})
 }
+
+// this router is same as ExtractFrame but using GET method and return image/
+func ExtractFrameAsFile(c *gin.Context) {
+	var episode string = c.Query("episode")
+	var frameNumber int
+
+	if _, err := fmt.Sscanf(c.Query("frame"), "%d", &frameNumber); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	if runtime.GOOS == "windows" {
+		homePath = os.Getenv("USERPROFILE")
+	}
+	videoPath := fmt.Sprintf(videoPath, homePath, episode)
+	frame, fps := video.FetchVideoFPS(videoPath)
+	if frame < frameNumber {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "frame number out of range"})
+		return
+	}
+	buf, err := video.ExtractFrame(episode, frameNumber, fps)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.Data(http.StatusOK, "image/png", buf.Bytes())
+}

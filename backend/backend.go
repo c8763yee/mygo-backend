@@ -13,6 +13,6 @@ func CreateEngine() *gin.Engine {
 	r.POST("/api/search", Search)
 	r.POST("/api/extract_frame", ExtractFrame)
 	r.POST("/api/extract_gif", ExtractGIF)
-
+	r.GET("/api/frame", ExtractFrameAsFile)
 	return r
 }
