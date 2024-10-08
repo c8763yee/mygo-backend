@@ -57,9 +57,10 @@ func ExtractFrame(episode string, frameNumber int, fps float64) (*bytes.Buffer, 
 
 	buf := &bytes.Buffer{}
 	err := ffmpeg.Input(videoPath, ffmpeg.KwArgs{"ss": FrameToTime(frameNumber, fps)}).
-		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
+		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "webp"}).
 		WithOutput(buf, os.Stdout).
 		Run()
+
 	if err != nil {
 		return nil, err
 	}

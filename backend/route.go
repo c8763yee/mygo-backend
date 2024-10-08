@@ -91,7 +91,7 @@ func ExtractGIF(c *gin.Context) {
 	c.JSON(http.StatusOK, ExtraceGIFResponse{GIF: base64.StdEncoding.EncodeToString(buf.Bytes())})
 }
 
-// this router is same as ExtractFrame but using GET method and return image/
+// this router is same as ExtractFrame but using GET method and return image/webp
 func ExtractFrameAsFile(c *gin.Context) {
 	var episode string = c.Query("episode")
 	var frameNumber int
@@ -114,5 +114,5 @@ func ExtractFrameAsFile(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.Data(http.StatusOK, "image/png", buf.Bytes())
+	c.Data(http.StatusOK, "image/webp", buf.Bytes())
 }
