@@ -1,8 +1,8 @@
 package main
 
 import (
-	"mygo/backend"
-	_ "mygo/data"
+	"github.com/c8763yee/mygo-backend/backend"
+	_ "github.com/c8763yee/mygo-backend/data"
 
 	"github.com/gin-gonic/gin"
 )

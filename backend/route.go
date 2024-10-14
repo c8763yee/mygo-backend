@@ -3,11 +3,12 @@ package backend
 import (
 	"encoding/base64"
 	"fmt"
-	"mygo/data"
-	"mygo/video"
 	"net/http"
 	"os"
 	"runtime"
+
+	"github.com/c8763yee/mygo-backend/data"
+	"github.com/c8763yee/mygo-backend/video"
 
 	"github.com/gin-gonic/gin"
 )

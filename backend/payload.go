@@ -1,7 +1,7 @@
 package backend
 
 import (
-	"mygo/data"
+	"github.com/c8763yee/mygo-backend/data"
 
 	_ "github.com/gin-gonic/gin"
 )
