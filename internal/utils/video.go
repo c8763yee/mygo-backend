@@ -1,4 +1,4 @@
-package video
+package utils
 
 import (
 	"bytes"
@@ -6,15 +6,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"strconv"
 	"time"
 
+	"github.com/c8763yee/mygo-backend/internal/config"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
-	ffprobe "gopkg.in/vansante/go-ffprobe.v2"
+	"gopkg.in/vansante/go-ffprobe.v2"
 )
-
-var homePath = os.Getenv("HOME")
 
 func FetchVideoFPS(videoPath string) (int, float64) {
 	ctx, cancelFn := context.WithTimeout(context.Background(), 5*time.Second)
@@ -45,15 +43,14 @@ func FrameToTime(frame int, fps float64) string {
 	return fmt.Sprintf("%02d:%02d:%06.3f", hour, min, sec)
 }
 
-func ExtractFrame(episode string, frameNumber int, fps float64) (*bytes.Buffer, error) {
+func ExtractFrame(episode string, frameNumber int) (*bytes.Buffer, error) {
 	if frameNumber < 0 {
 		return nil, fmt.Errorf("frame number must be positive")
 	}
-	if runtime.GOOS == "windows" {
-		homePath = os.Getenv("USERPROFILE")
-	}
-	videoPath := fmt.Sprintf("%s/mygo-anime/%s.mp4", homePath, episode)
-	fmt.Printf("Extracting frame %d from %s\n", frameNumber, videoPath)
+
+	videoPath := fmt.Sprintf("%s/%s.mp4", config.AppConfig.VideoPath, episode)
+	fmt.Println(videoPath)
+	_, fps := FetchVideoFPS(videoPath)
 
 	buf := &bytes.Buffer{}
 	err := ffmpeg.Input(videoPath, ffmpeg.KwArgs{"ss": FrameToTime(frameNumber, fps)}).
@@ -65,22 +62,20 @@ func ExtractFrame(episode string, frameNumber int, fps float64) (*bytes.Buffer, 
 		return nil, err
 	}
 
-	fmt.Printf("Extracted frame %d from %s\n", frameNumber, videoPath)
 	return buf, nil
 }
 
-func ExtractGIF(episode string, startFrame, endFrame int, fps float64) (*bytes.Buffer, error) {
-	if runtime.GOOS == "windows" {
-		homePath = os.Getenv("USERPROFILE")
-	}
-	videoPath := fmt.Sprintf("%s/mygo-anime/%s.mp4", homePath, episode)
+func ExtractGIF(episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
+	videoPath := fmt.Sprintf("%s/%s.mp4", config.AppConfig.VideoPath, episode)
+	_, fps := FetchVideoFPS(videoPath)
+
 	reverse := false
 
 	if startFrame > endFrame {
 		startFrame, endFrame = endFrame, startFrame
 		reverse = true
 	} else if startFrame == endFrame {
-		return ExtractFrame(episode, startFrame, fps)
+		return ExtractFrame(episode, startFrame)
 	}
 
 	startTime := FrameToTime(startFrame, fps)

@@ -1,0 +1,306 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a server for MyGO Sentence Search and Image/GIF Extraction.",
+        "title": "MyGO Backend API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/extract_frame": {
+            "post": {
+                "description": "Extract Frame based on episode and frame number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "extract"
+                ],
+                "summary": "Extract Frame",
+                "parameters": [
+                    {
+                        "description": "Extract Frame parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ExtractFrameRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ExtractFrameResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/extract_gif": {
+            "post": {
+                "description": "Extract GIF based on episode, start, and end",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "extract"
+                ],
+                "summary": "Extract GIF",
+                "parameters": [
+                    {
+                        "description": "Extract GIF parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ExtractGIFRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ExtractGIFResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/frame": {
+            "get": {
+                "description": "Extract Frame as File based on episode and frame number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/webp"
+                ],
+                "tags": [
+                    "extract"
+                ],
+                "summary": "Extract Frame as File",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Episode",
+                        "name": "episode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Frame Number",
+                        "name": "frame",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
+        "/gif": {
+            "get": {
+                "description": "Extract GIF as File based on episode, start, and end",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/gif"
+                ],
+                "tags": [
+                    "extract"
+                ],
+                "summary": "Extract GIF as File",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Episode",
+                        "name": "episode",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Start",
+                        "name": "start",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "End",
+                        "name": "end",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                }
+            }
+        },
+        "/search": {
+            "post": {
+                "description": "Search for sentences based on query and other parameters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "search"
+                ],
+                "summary": "Search for sentences",
+                "parameters": [
+                    {
+                        "description": "Search parameters",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SearchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SearchResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ExtractFrameRequest": {
+            "type": "object",
+            "properties": {
+                "episode": {
+                    "type": "string"
+                },
+                "frame": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ExtractFrameResponse": {
+            "type": "object",
+            "properties": {
+                "frame": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ExtractGIFRequest": {
+            "type": "object",
+            "properties": {
+                "end": {
+                    "type": "integer"
+                },
+                "episode": {
+                    "type": "string"
+                },
+                "start": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ExtractGIFResponse": {
+            "type": "object",
+            "properties": {
+                "gif": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SearchRequest": {
+            "type": "object",
+            "properties": {
+                "episode": {
+                    "type": "string"
+                },
+                "nth_page": {
+                    "type": "integer"
+                },
+                "paged_by": {
+                    "type": "integer"
+                },
+                "query": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.SearchResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.SentenceItem"
+                    }
+                }
+            }
+        },
+        "models.SentenceItem": {
+            "type": "object",
+            "properties": {
+                "episode": {
+                    "type": "string"
+                },
+                "frame_end": {
+                    "type": "integer"
+                },
+                "frame_start": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "segment_id": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

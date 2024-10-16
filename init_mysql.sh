@@ -1,9 +1,9 @@
 #!/bin/bash
-mariadb -u root -p${MYSQL_ROOT_PASSWORD} <<EOF
-CREATE DATABASE IF NOT EXISTS ${MYSQL_DB_NAME};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DB_NAME}.* TO '${MYSQL_USER}'@'localhost';
+mariadb -u root -p${ROOT_PASSWORD} <<EOF
+CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+CREATE USER IF NOT EXISTS '${USER}'@'localhost' IDENTIFIED BY '${PASSWORD}';
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
->&2 echo -e "MariaDB database initialized with database: '${MYSQL_DB_NAME}' and user: '${MYSQL_USER}'"
+>&2 echo -e "MariaDB database initialized with database: '${DB_NAME}' and user: '${USER}'"

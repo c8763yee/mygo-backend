@@ -1,0 +1,201 @@
+basePath: /api
+definitions:
+  models.ExtractFrameRequest:
+    properties:
+      episode:
+        type: string
+      frame:
+        type: integer
+    type: object
+  models.ExtractFrameResponse:
+    properties:
+      frame:
+        type: string
+    type: object
+  models.ExtractGIFRequest:
+    properties:
+      end:
+        type: integer
+      episode:
+        type: string
+      start:
+        type: integer
+    type: object
+  models.ExtractGIFResponse:
+    properties:
+      gif:
+        type: string
+    type: object
+  models.SearchRequest:
+    properties:
+      episode:
+        type: string
+      nth_page:
+        type: integer
+      paged_by:
+        type: integer
+      query:
+        type: string
+    type: object
+  models.SearchResponse:
+    properties:
+      count:
+        type: integer
+      results:
+        items:
+          $ref: '#/definitions/models.SentenceItem'
+        type: array
+    type: object
+  models.SentenceItem:
+    properties:
+      episode:
+        type: string
+      frame_end:
+        type: integer
+      frame_start:
+        type: integer
+      id:
+        type: integer
+      segment_id:
+        type: integer
+      text:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a server for MyGO Sentence Search and Image/GIF Extraction.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: MyGO Backend API
+  version: "1.0"
+paths:
+  /extract_frame:
+    post:
+      consumes:
+      - application/json
+      description: Extract Frame based on episode and frame number
+      parameters:
+      - description: Extract Frame parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ExtractFrameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExtractFrameResponse'
+      summary: Extract Frame
+      tags:
+      - extract
+  /extract_gif:
+    post:
+      consumes:
+      - application/json
+      description: Extract GIF based on episode, start, and end
+      parameters:
+      - description: Extract GIF parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ExtractGIFRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExtractGIFResponse'
+      summary: Extract GIF
+      tags:
+      - extract
+  /frame:
+    get:
+      consumes:
+      - application/json
+      description: Extract Frame as File based on episode and frame number
+      parameters:
+      - description: Episode
+        in: query
+        name: episode
+        required: true
+        type: string
+      - description: Frame Number
+        in: query
+        name: frame
+        required: true
+        type: integer
+      produces:
+      - image/webp
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      summary: Extract Frame as File
+      tags:
+      - extract
+  /gif:
+    get:
+      consumes:
+      - application/json
+      description: Extract GIF as File based on episode, start, and end
+      parameters:
+      - description: Episode
+        in: query
+        name: episode
+        required: true
+        type: string
+      - description: Start
+        in: query
+        name: start
+        required: true
+        type: integer
+      - description: End
+        in: query
+        name: end
+        required: true
+        type: integer
+      produces:
+      - image/gif
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      summary: Extract GIF as File
+      tags:
+      - extract
+  /search:
+    post:
+      consumes:
+      - application/json
+      description: Search for sentences based on query and other parameters
+      parameters:
+      - description: Search parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SearchResponse'
+      summary: Search for sentences
+      tags:
+      - search
+swagger: "2.0"
