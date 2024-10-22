@@ -54,7 +54,7 @@ func ExtractFrame(episode string, frameNumber int) (*bytes.Buffer, error) {
 
 	buf := &bytes.Buffer{}
 	err := ffmpeg.Input(videoPath, ffmpeg.KwArgs{"ss": FrameToTime(frameNumber, fps)}).
-		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "webp"}).
+		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "webp", "loglevel": "quiet"}).
 		WithOutput(buf, os.Stdout).
 		Run()
 
@@ -91,7 +91,7 @@ func ExtractGIF(episode string, startFrame, endFrame int) (*bytes.Buffer, error)
 	split := input.Split()
 	palette := split.Get("0").Filter("palettegen", nil)
 	processPalette := ffmpeg.Filter([]*ffmpeg.Stream{split.Get("1"), palette}, "paletteuse", nil).
-		Output("pipe:", ffmpeg.KwArgs{"vcodec": "gif", "format": "gif"}).
+		Output("pipe:", ffmpeg.KwArgs{"vcodec": "gif", "format": "gif", "loglevel": "quiet"}).
 		WithOutput(buf, os.Stdout)
 
 	fmt.Printf("Extracting GIF from %s: start_frame=%d, end_frame=%d\n", videoPath, startFrame, endFrame)

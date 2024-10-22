@@ -55,7 +55,7 @@ func ImportDataFromJSON(db *gorm.DB) error {
 		return fmt.Errorf("無法獲取 max_connections: %v", err)
 	}
 
-	workerCount := maxConnections
+	workerCount := maxConnections - 10
 	if workerCount <= 0 {
 		return fmt.Errorf("可用的連接數不足")
 	}
