@@ -7,6 +7,7 @@ services:
     container_name: mygo
     volumes:
       - $HOME/mygo-anime:/root/mygo-anime
+      - .env:/app/.env
     network_mode: host
     environment:
       - GIN_MODE=release
