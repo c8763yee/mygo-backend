@@ -62,6 +62,6 @@ func ExtractFrameAsFile() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		c.Data(http.StatusOK, "image/webp", buf.Bytes())
+		c.Data(http.StatusOK, "image/jpeg", buf.Bytes())
 	}
 }
