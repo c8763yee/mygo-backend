@@ -1,6 +1,6 @@
 # MyGO-backend
 
-輸入關鍵字以搜尋MyGO台詞
+輸入關鍵字以搜尋MyGO台詞（主要是自己用，不過也歡迎PR）
 # TODO
 - [ ] 新增Ave mujica台詞
 - [ ] 新增Server-side Cache
