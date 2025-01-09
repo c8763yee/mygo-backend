@@ -4,22 +4,23 @@ import (
 	"bytes"
 	"errors"
 
-	"github.com/c8763yee/mygo-backend/internal/utils"
+	"github.com/c8763yee/mygo-backend/pkg/extract"
 )
 
 type VideoService struct{}
 
-const MAX_GIF_FRAMES_DIFF = 1000
+const MAX_GIF_FRAMES_DIFF = 240
 
 func NewVideoService() *VideoService {
 	return &VideoService{}
 }
 
-func (s *VideoService) ExtractFrame(episode string, frameNumber int) (*bytes.Buffer, error) {
-	return utils.ExtractFrame(episode, frameNumber)
+// func (s *VideoService) ExtractFrame(episode string, frameNumber int) (*bytes.Buffer, error) {
+func (s *VideoService) ExtractFrame(videoName, episode string, frameNumber int) (*bytes.Buffer, error) {
+	return extract.ExtractFrame(videoName, episode, frameNumber)
 }
 
-func (s *VideoService) ExtractGIF(episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
+func (s *VideoService) ExtractGIF(videoName, episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
 	// raise error if diff between start and end frames is too large (absolutely arbitrary)
 	frameDiff := endFrame - startFrame
 	if frameDiff < 0 {
@@ -30,5 +31,5 @@ func (s *VideoService) ExtractGIF(episode string, startFrame, endFrame int) (*by
 		return nil, errors.New("frame diff too large")
 	}
 
-	return utils.ExtractGIF(episode, startFrame, endFrame)
+	return extract.ExtractGIF(videoName, episode, startFrame, endFrame)
 }

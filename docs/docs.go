@@ -24,74 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/extract_frame": {
-            "post": {
-                "description": "Extract Frame based on episode and frame number",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "extract"
-                ],
-                "summary": "Extract Frame",
-                "parameters": [
-                    {
-                        "description": "Extract Frame parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.ExtractFrameRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.ExtractFrameResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/extract_gif": {
-            "post": {
-                "description": "Extract GIF based on episode, start, and end",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "extract"
-                ],
-                "summary": "Extract GIF",
-                "parameters": [
-                    {
-                        "description": "Extract GIF parameters",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.ExtractGIFRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.ExtractGIFResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/frame": {
             "get": {
                 "description": "Extract Frame as File based on episode and frame number",
@@ -99,7 +31,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "produces": [
-                    "image/webp"
+                    "image/jpeg"
                 ],
                 "tags": [
                     "extract"
@@ -108,6 +40,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Video Name",
+                        "name": "video_name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "1",
                         "description": "Episode",
                         "name": "episode",
                         "in": "query",
@@ -143,8 +83,15 @@ const docTemplate = `{
                 "tags": [
                     "extract"
                 ],
-                "summary": "Extract GIF as File",
+                "summary": "Extract GIF",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Video Name",
+                        "name": "video_name",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Episode",
@@ -213,47 +160,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.ExtractFrameRequest": {
-            "type": "object",
-            "properties": {
-                "episode": {
-                    "type": "string"
-                },
-                "frame": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.ExtractFrameResponse": {
-            "type": "object",
-            "properties": {
-                "frame": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.ExtractGIFRequest": {
-            "type": "object",
-            "properties": {
-                "end": {
-                    "type": "integer"
-                },
-                "episode": {
-                    "type": "string"
-                },
-                "start": {
-                    "type": "integer"
-                }
-            }
-        },
-        "models.ExtractGIFResponse": {
-            "type": "object",
-            "properties": {
-                "gif": {
-                    "type": "string"
-                }
-            }
-        },
         "models.SearchRequest": {
             "type": "object",
             "properties": {
@@ -268,6 +174,17 @@ const docTemplate = `{
                 },
                 "query": {
                     "type": "string"
+                },
+                "video_name": {
+                    "enum": [
+                        "Ave Mujica",
+                        "MyGO"
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.VideoNameEnum"
+                        }
+                    ]
                 }
             }
         },
@@ -305,8 +222,22 @@ const docTemplate = `{
                 },
                 "text": {
                     "type": "string"
+                },
+                "video_name": {
+                    "type": "string"
                 }
             }
+        },
+        "models.VideoNameEnum": {
+            "type": "string",
+            "enum": [
+                "Ave Mujica",
+                "MyGO"
+            ],
+            "x-enum-varnames": [
+                "AveMujica",
+                "MyGO"
+            ]
         }
     }
 }`

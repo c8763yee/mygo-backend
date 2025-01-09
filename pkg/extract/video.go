@@ -1,4 +1,4 @@
-package utils
+package extract
 
 import (
 	"bytes"
@@ -43,12 +43,12 @@ func FrameToTime(frame int, fps float64) string {
 	return fmt.Sprintf("%02d:%02d:%06.3f", hour, min, sec)
 }
 
-func ExtractFrame(episode string, frameNumber int) (*bytes.Buffer, error) {
+func ExtractFrame(videoName, episode string, frameNumber int) (*bytes.Buffer, error) {
 	if frameNumber < 0 {
 		return nil, fmt.Errorf("frame number must be positive")
 	}
 
-	videoPath := fmt.Sprintf("%s/%s.mp4", config.AppConfig.VideoPath, episode)
+	videoPath := fmt.Sprintf("%s/%s/%s.mp4", config.AppConfig.VideoPath, videoName, episode)
 	fmt.Println(videoPath)
 	_, fps := FetchVideoFPS(videoPath)
 
@@ -65,8 +65,9 @@ func ExtractFrame(episode string, frameNumber int) (*bytes.Buffer, error) {
 	return buf, nil
 }
 
-func ExtractGIF(episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
-	videoPath := fmt.Sprintf("%s/%s.mp4", config.AppConfig.VideoPath, episode)
+// func ExtractGIF(episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
+func ExtractGIF(videoName, episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
+	videoPath := fmt.Sprintf("%s/%s/%s.mp4", config.AppConfig.VideoPath, videoName, episode)
 	_, fps := FetchVideoFPS(videoPath)
 
 	reverse := false
@@ -75,7 +76,7 @@ func ExtractGIF(episode string, startFrame, endFrame int) (*bytes.Buffer, error)
 		startFrame, endFrame = endFrame, startFrame
 		reverse = true
 	} else if startFrame == endFrame {
-		return ExtractFrame(episode, startFrame)
+		return ExtractFrame(videoName, episode, startFrame)
 	}
 
 	startTime := FrameToTime(startFrame, fps)

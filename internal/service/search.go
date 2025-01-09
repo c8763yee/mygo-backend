@@ -18,9 +18,9 @@ func NewSearchService(db *gorm.DB) *SearchService {
 	}
 }
 
-func (s *SearchService) SearchByText(text, episode string, pagedBy, page int) ([]models.SentenceItem, int64, error) {
+func (s *SearchService) SearchByText(text string, videoName models.VideoNameEnum, episode string, pagedBy, page int) ([]models.SentenceItem, int64, error) {
 	if pagedBy == 0 {
 		pagedBy = DEFAULT_PAGED_BY
 	}
-	return s.repo.SearchByText(text, episode, pagedBy, page)
+	return s.repo.SearchByText(text, videoName, episode, pagedBy, page)
 }

@@ -19,12 +19,7 @@ type Config struct {
 var AppConfig Config
 
 func LoadConfig() {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		homeDir = "."
-	}
-	err = godotenv.Load(".env")
-	if err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		log.Fatal("Error loading .env file")
 	}
 	AppConfig = Config{
@@ -37,6 +32,6 @@ func LoadConfig() {
 		),
 		ServerAddress:  os.Getenv("SERVER_ADDRESS"),
 		AllowedOrigins: strings.Split(os.Getenv("ALLOWED_ORIGIN"), ","),
-		VideoPath:      fmt.Sprintf("%s/%s", homeDir, os.Getenv("VIDEO_PATH")),
+		VideoPath:      os.Getenv("VIDEO_PATH"),
 	}
 }

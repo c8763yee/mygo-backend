@@ -14,11 +14,19 @@ func (SentenceItem) TableName() string {
 	return "sentence"
 }
 
+type VideoNameEnum string
+
+const (
+	AveMujica VideoNameEnum = "Ave Mujica"
+	MyGO      VideoNameEnum = "MyGO"
+)
+
 type SearchRequest struct {
-	Query   string `json:"query"`
-	Episode string `json:"episode"`
-	NthPage int    `json:"nth_page"`
-	PagedBy int    `json:"paged_by"`
+	Query     string        `json:"query"`
+	VideoName VideoNameEnum `json:"video_name" enums:"Ave Mujica,MyGO"`
+	Episode   string        `json:"episode"`
+	NthPage   int           `json:"nth_page"`
+	PagedBy   int           `json:"paged_by"`
 }
 
 type SearchResponse struct {
@@ -27,20 +35,20 @@ type SearchResponse struct {
 }
 
 type ExtractFrameRequest struct {
-	Episode     string `json:"episode"`
-	FrameNumber int    `json:"frame"`
-}
-
-type ExtractFrameResponse struct {
-	Frame string `json:"frame"`
+	// Available Video Name:
+	// * Ave Mujica - Ave Mujica
+	// * MyGO - MyGO
+	VideoName   VideoNameEnum `json:"video_name" enums:"Ave Mujica,MyGO"`
+	Episode     string        `json:"episode"`
+	FrameNumber int           `json:"frame"`
 }
 
 type ExtractGIFRequest struct {
-	Episode string `json:"episode"`
-	Start   int    `json:"start"`
-	End     int    `json:"end"`
-}
-
-type ExtractGIFResponse struct {
-	GIF string `json:"gif"`
+	// Available Video Name:
+	// * Ave Mujica - Ave Mujica
+	// * MyGO - MyGO
+	VideoName VideoNameEnum `json:"video_name" enums:"Ave Mujica,MyGO"`
+	Episode   string        `json:"episode"`
+	Start     int           `json:"start"`
+	End       int           `json:"end"`
 }

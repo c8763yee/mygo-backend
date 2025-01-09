@@ -10,14 +10,14 @@ import (
 )
 
 // Search godoc
-// @Summary Search for sentences
-// @Description Search for sentences based on query and other parameters
-// @Tags search
-// @Accept json
-// @Produce json
-// @Param request body models.SearchRequest true "Search parameters"
-// @Success 200 {object} models.SearchResponse
-// @Router /search [post]
+//	@Summary		Search for sentences
+//	@Description	Search for sentences based on query and other parameters
+//	@Tags			search
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		models.SearchRequest	true	"Search parameters"
+//	@Success		200		{object}	models.SearchResponse
+//	@Router			/search [post]
 func Search(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req models.SearchRequest
@@ -27,7 +27,7 @@ func Search(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		searchService := service.NewSearchService(db)
-		result, count, err := searchService.SearchByText(req.Query, req.Episode, req.PagedBy, req.NthPage)
+		result, count, err := searchService.SearchByText(req.Query, req.VideoName, req.Episode, req.PagedBy, req.NthPage)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
