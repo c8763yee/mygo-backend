@@ -12,4 +12,5 @@ services:
     network_mode: host
     environment:
       - GIN_MODE=release
+      - CONFIG_PATH=/app/internal/config/config.yaml
     restart: always

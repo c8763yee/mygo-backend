@@ -16,6 +16,7 @@ server: "0.0.0.0:8080"
 cors_origin:
   - "http://localhost:*"
   - "https://c8763yee.github.io/*"
+  # - "*"
 video_path: "/mnt/d/ocr-videos"
 # folder structure
 # - <video_path>
