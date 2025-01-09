@@ -3,6 +3,7 @@ package middleware
 import (
 	"time"
 
+	"github.com/c8763yee/mygo-backend/internal/config"
 	"github.com/gin-gonic/gin"
 	"github.com/ulule/limiter/v3"
 	mgin "github.com/ulule/limiter/v3/drivers/middleware/gin"
@@ -17,18 +18,18 @@ Rate Limit:
 
 var (
 	SearchRateLimit *limiter.Rate = &limiter.Rate{
-		Period: 1 * time.Minute,
-		Limit:  60,
+		Period: time.Duration(config.AppConfig.RateLimit.Search.Duration) * time.Second,
+		Limit:  config.AppConfig.RateLimit.Search.Limit,
 	}
 
 	FrameRateLimit *limiter.Rate = &limiter.Rate{
-		Period: 1 * time.Minute,
-		Limit:  30,
+		Period: time.Duration(config.AppConfig.RateLimit.Frame.Duration) * time.Second,
+		Limit:  config.AppConfig.RateLimit.Frame.Limit,
 	}
 
 	GIFRateLimit *limiter.Rate = &limiter.Rate{
-		Period: 1 * time.Minute,
-		Limit:  10,
+		Period: time.Duration(config.AppConfig.RateLimit.GIF.Duration) * time.Second,
+		Limit:  config.AppConfig.RateLimit.GIF.Limit,
 	}
 )
 

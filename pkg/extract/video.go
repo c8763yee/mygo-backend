@@ -81,9 +81,8 @@ func ExtractGIF(videoName, episode string, startFrame, endFrame int) (*bytes.Buf
 
 	startTime := FrameToTime(startFrame, fps)
 	endTime := FrameToTime(endFrame, fps)
-
 	buf := &bytes.Buffer{}
-	input := ffmpeg.Input(videoPath, ffmpeg.KwArgs{"ss": startTime, "to": endTime})
+	input := ffmpeg.Input(videoPath, ffmpeg.KwArgs{"ss": startTime, "to": endTime}).Filter("scale", ffmpeg.Args{}, ffmpeg.KwArgs{"width": -1, "height": 360})
 
 	if reverse {
 		input = input.Filter("reverse", nil)

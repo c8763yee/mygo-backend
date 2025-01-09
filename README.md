@@ -5,7 +5,7 @@
 # TODO
 
 - [x] 新增 Ave Mujica 台詞
-- [ ] 新增 Server-side Cache
+- [x] 新增 Server-side Cache
 - [x] 調整 API 架構
 - [ ] 允許加入自訂台詞
 

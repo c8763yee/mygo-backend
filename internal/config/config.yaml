@@ -1,0 +1,28 @@
+cache: # in second
+  duration: 300
+  clean: 600
+rate_limit:
+  search:
+    duration: 86400 # in second
+    limit: 1000
+  frame:
+    duration: 3600 # in second
+    limit: 200
+  gif:
+    duration: 3600 # in second
+    limit: 60
+
+server: "0.0.0.0:8080"
+cors_origin:
+  - "http://localhost:*"
+  - "https://c8763yee.github.io/*"
+video_path: "/mnt/d/ocr-videos"
+# folder structure
+# - <video_path>
+# --- <video_name1>
+# ------ <episode>.mp4
+#        ...
+# --- <video_name2>
+# ------ <episode>.mp4
+#        ...
+#     ...

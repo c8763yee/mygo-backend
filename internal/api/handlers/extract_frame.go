@@ -9,6 +9,7 @@ import (
 )
 
 // ExtractFrame godoc
+//
 //	@Summary		Extract Frame as File
 //	@Description	Extract Frame as File based on episode and frame number
 //	@Tags			extract

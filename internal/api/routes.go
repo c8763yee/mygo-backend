@@ -17,8 +17,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	api := r.Group("/api")
 	{
 		api.POST("/search", middleware.RateLimit(memory, middleware.SearchRateLimit), handlers.Search(db))
-		api.GET("/gif", middleware.RateLimit(memory, middleware.GIFRateLimit), handlers.ExtractGIF())
-		api.GET("/frame", middleware.RateLimit(memory, middleware.FrameRateLimit), handlers.ExtractFrame())
+		api.GET("/gif", middleware.RateLimit(memory, middleware.GIFRateLimit), middleware.CacheMiddlewareGIF(), handlers.ExtractGIF())
+		api.GET("/frame", middleware.RateLimit(memory, middleware.FrameRateLimit), middleware.CacheMiddlewareFrame(), handlers.ExtractFrame())
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler,
