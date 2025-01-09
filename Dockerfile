@@ -11,7 +11,7 @@ FROM alpine:3.14
 RUN apk update && apk upgrade && apk add --no-cache ffmpeg
 WORKDIR /app
 COPY --from=builder /app/bin/main .
-COPY --from=builder /app/data.json .
+COPY --from=builder /app/internal/config/config.yaml .
 
 EXPOSE 8080
 CMD ["./main"]

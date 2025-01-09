@@ -6,8 +6,9 @@ services:
     image: mygo
     container_name: mygo
     volumes:
-      - $HOME/mygo-anime:/root/mygo-anime
+      - /mnt/d/ocr-videos:/app/ocr-videos
       - .env:/app/.env
+      - ./internal/config/config.yaml:/app/internal/config/config.yaml
     network_mode: host
     environment:
       - GIN_MODE=release

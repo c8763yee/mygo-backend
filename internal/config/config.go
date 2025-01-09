@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 )
 
 type RateLimitValue struct {
@@ -43,20 +43,50 @@ type Config struct {
 var AppConfig Config
 
 func LoadConfig() {
-	file, err := os.Open("internal/config/config.yaml")
-	if err != nil {
-		log.Fatal(err)
-	}
-	yamlContent, err := io.ReadAll(file)
-	if err != nil {
-		log.Fatal(err)
+	// Try multiple possible config file locations
+	configPaths := []string{
+		os.Getenv("CONFIG_PATH"),      // First try environment variable
+		"internal/config/config.yaml", // Original path
+		"/app/config/config.yaml",     // Common Docker path
+		"config.yaml",                 // Root directory
 	}
 
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("Error loading .env file")
+	var yamlContent []byte
+	var err error
+	var loadedPath string
+
+	// Try each path until we successfully load the file
+	for _, path := range configPaths {
+		if path == "" {
+			continue
+		}
+		if yamlContent, err = loadFile(path); err == nil {
+			loadedPath = path
+			break
+		}
 	}
-	yamlConfig := yamlConfig{}
-	if err := yaml.Unmarshal(yamlContent, &yamlConfig); err != nil {
+
+	if yamlContent == nil {
+		log.Fatalf("Could not find config file in any of the paths: %v", configPaths)
+	}
+
+	log.Printf("Loaded config from: %s", loadedPath)
+
+	// Load .env file with multiple possible locations
+	envFiles := []string{".env", "/app/.env"}
+	envLoaded := false
+	for _, envFile := range envFiles {
+		if err := godotenv.Load(envFile); err == nil {
+			envLoaded = true
+			break
+		}
+	}
+	if !envLoaded {
+		log.Println("Warning: .env file not found")
+	}
+
+	yamlConfigObj := yamlConfig{}
+	if err := yaml.Unmarshal(yamlContent, &yamlConfigObj); err != nil {
 		log.Fatal(err)
 	}
 
@@ -70,5 +100,15 @@ func LoadConfig() {
 				os.Getenv("DB_NAME"),
 			),
 		},
-		yamlConfig: yamlConfig}
+		yamlConfig: yamlConfigObj,
+	}
+}
+
+func loadFile(path string) ([]byte, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	return io.ReadAll(file)
 }
