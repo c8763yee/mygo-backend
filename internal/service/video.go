@@ -20,7 +20,14 @@ func (s *VideoService) ExtractFrame(videoName, episode string, frameNumber int) 
 	return extract.ExtractFrame(videoName, episode, frameNumber)
 }
 
-func (s *VideoService) ExtractGIF(videoName, episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
+func (s *VideoService) ExtractGIF(videoName, episode string, startFrame, endFrame int, format string) (*bytes.Buffer, error) {
+	if format == "" {
+		// default to gif
+		format = "gif"
+	} else if format != "gif" && format != "webm" {
+		return nil, errors.New("unsupported format")
+	}
+
 	// raise error if diff between start and end frames is too large (absolutely arbitrary)
 	frameDiff := endFrame - startFrame
 	if frameDiff < 0 {
@@ -31,5 +38,10 @@ func (s *VideoService) ExtractGIF(videoName, episode string, startFrame, endFram
 		return nil, errors.New("frame diff too large")
 	}
 
-	return extract.ExtractGIF(videoName, episode, startFrame, endFrame)
+	if format == "gif" {
+		return extract.ExtractGIF(videoName, episode, startFrame, endFrame)
+	} else if format == "webm" {
+		return extract.ExtractWebM(videoName, episode, startFrame, endFrame)
+	}
+	return nil, errors.New("unsupported format")
 }

@@ -51,4 +51,5 @@ type ExtractGIFRequest struct {
 	Episode   string        `json:"episode"`
 	Start     int           `json:"start"`
 	End       int           `json:"end"`
+	Format    string        `json:"format" enums:"gif,webm"`
 }

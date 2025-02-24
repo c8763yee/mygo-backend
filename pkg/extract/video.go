@@ -101,3 +101,43 @@ func ExtractGIF(videoName, episode string, startFrame, endFrame int) (*bytes.Buf
 	}
 	return buf, nil
 }
+
+func ExtractWebM(videoName, episode string, startFrame, endFrame int) (*bytes.Buffer, error) {
+	videoPath := fmt.Sprintf("%s/%s/%s.mp4", config.AppConfig.VideoPath, videoName, episode)
+	_, fps := FetchVideoFPS(videoPath)
+
+	reverse := false
+
+	if startFrame > endFrame {
+		startFrame, endFrame = endFrame, startFrame
+		reverse = true
+	} else if startFrame == endFrame {
+		return ExtractFrame(videoName, episode, startFrame)
+	}
+
+	startTime := FrameToTime(startFrame, fps)
+	endTime := FrameToTime(endFrame, fps)
+	buf := &bytes.Buffer{}
+	input := ffmpeg.Input(videoPath, ffmpeg.KwArgs{"ss": startTime, "to": endTime})
+
+	if reverse {
+		input = input.Filter("reverse", nil)
+	}
+
+	process := input.Output("pipe:", ffmpeg.KwArgs{
+		"c:v": "libvpx-vp9",
+		"crf": 21,
+		"b:v": 0,
+		"b:a": "128k",
+		"c:a": "libopus",
+		"loglevel": "quiet",
+		"f": "webm",
+	}).WithOutput(buf, os.Stdout)
+
+	fmt.Printf("Extracting WebM from %s: start_frame=%d, end_frame=%d\n", videoPath, startFrame, endFrame)
+	err := process.Run()
+	if err != nil {
+		return nil, err
+	}
+	return buf, nil
+}
