@@ -101,7 +101,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Extract GIF as File based on episode, start, and end
+      description: Extract GIF or WebM as File based on episode, start, and end
       parameters:
       - description: Video Name
         in: query
@@ -123,14 +123,20 @@ paths:
         name: end
         required: true
         type: integer
+      - description: Format (gif or webm)
+        in: query
+        name: format
+        required: true
+        type: string
       produces:
       - image/gif
+      - video/webm
       responses:
         "200":
           description: OK
           schema:
             type: file
-      summary: Extract GIF
+      summary: Extract GIF or WebM
       tags:
       - extract
   /search:

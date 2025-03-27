@@ -73,17 +73,18 @@ const docTemplate = `{
         },
         "/gif": {
             "get": {
-                "description": "Extract GIF as File based on episode, start, and end",
+                "description": "Extract GIF or WebM as File based on episode, start, and end",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "image/gif"
+                    "image/gif",
+                    "video/webm"
                 ],
                 "tags": [
                     "extract"
                 ],
-                "summary": "Extract GIF",
+                "summary": "Extract GIF or WebM",
                 "parameters": [
                     {
                         "type": "string",
@@ -110,6 +111,13 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "End",
                         "name": "end",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Format (gif or webm)",
+                        "name": "format",
                         "in": "query",
                         "required": true
                     }
